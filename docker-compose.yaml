@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+
+  notebook:
+    stdin_open: true
+    tty: true
+    image: voicecraft:1.0.0-dev
+    build:
+      context: .
+      dockerfile: dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    volumes:
+      - $PWD:/workspace
+    ports:
+      - 8888:8888
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    shm_size: 16gb
+    command: ["sh", "-c", "jupyter notebook --ip 0.0.0.0 --allow-root"]
